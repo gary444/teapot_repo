@@ -27,6 +27,9 @@ final int left_tilt_limit = -30;
 final int right_tilt_limit = 30;
 PImage img;
 
+//cups
+PShape cup;
+
 
 //water droplets
 ArrayList<Droplet> droplets = new ArrayList<Droplet>();
@@ -57,8 +60,9 @@ void setup() {
   // set window size 
   size(1000, 700, OPENGL);
   
-  //load obj
+  //load objs
   teapot = loadShape("teapot.obj");
+  cup = loadShape("cup.obj");
   
   //texture
   img = loadImage("pattern1.png");
@@ -194,6 +198,18 @@ void draw(){
   fill(#42464c);
   rect(0, baseY, width, baseHeight);
   
+  
+  pushMatrix();
+  fill(#ffffff);
+  scale(2);
+  translate(width/2, height * 0.8);
+  rotateX(PI)
+
+  shape(cup, 0, 0);
+  
+  
+  
+  popMatrix();
 
 }
 
