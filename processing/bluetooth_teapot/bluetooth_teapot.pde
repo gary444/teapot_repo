@@ -25,11 +25,14 @@ final float change_speed = 0.8;
 final float min_change = 0.1;
 final int left_tilt_limit = -30;
 final int right_tilt_limit = 30;
-PImage img;
+PImage teapot_tx;
 
 //cups
 PShape cup;
-
+int cup_x_pos;
+int cup_speed;
+//PImage cup_tx_1;
+//PImage cup_tx_2;
 
 //water droplets
 ArrayList<Droplet> droplets = new ArrayList<Droplet>();
@@ -58,23 +61,30 @@ void setup() {
  
  
   // set window size 
-  size(1000, 700, OPENGL);
+  //size(1000, 700, OPENGL);
+  fullScreen(OPENGL);
   
   //load objs
   teapot = loadShape("teapot.obj");
-  cup = loadShape("cup.obj");
+  cup = loadShape("mug.obj");
   
-  //texture
-  img = loadImage("pattern1.png");
-  teapot.setTexture(img); 
+  //textures
+  teapot_tx = loadImage("pattern1.png");
+  teapot.setTexture(teapot_tx); 
+  //cup_tx_1 = loadImage("pattern1.png");
+  //cup.setTexture(cup_tx_1);
 
   //droplet start points
-  dropStartX = int((width * 0.3));
+  dropStartX = int((width * 0.38));
   dropStartY = int(height * 0.4);
   
   //base
   baseY = int(height * 0.9);
   baseHeight = int(height * 0.1);
+  
+  //cup
+  cup_x_pos = 0;
+  cup_speed = 10;
 
   
 }
@@ -106,8 +116,8 @@ void draw(){
 
   // setup scene ------------------------------------------------------------
   
-  background(245, 238, 184);
-  fill(0, 0, 0);
+  //background(245, 238, 184);
+  //fill(0, 0, 0);
   
   lights();
   
@@ -168,13 +178,22 @@ void draw(){
   }  
     
     
+  //render scene box---------------------------------------------------------
+  fill(#ccdfff);
+  pushMatrix();
+  translate(width/2, height*0.4);
+  //noFill();
+  stroke(255);
+  box(1200,800, 2000);
+  popMatrix();
+    
   //render teapot ------------------------------------------------------------
   pushMatrix();
-  translate(width/2, height * 0.45);
+  translate(width/2, height * 0.47);
   translate(-0.5, -0.5, -0.5);
   scale(50);
   rotateY(PI);
-  rotateX(PI - (-PI * 0.2));
+  rotateX(PI - (-PI * 0.16));
   rotateZ(radians(pitch));
 
   shape(teapot, 0, 0);
@@ -186,7 +205,12 @@ void draw(){
   for (int i = droplets.size() - 1; i >= 0; i--){
      
     Droplet d = droplets.get(i);
-    ellipse(d.x_pos, d.y_pos, 20, 20);
+    //ellipse(d.x_pos, d.y_pos, 20, 20);
+    
+    pushMatrix();
+    translate(d.x_pos, d.y_pos, 110);
+    sphere(10);
+    popMatrix();
     
     d.y_pos += (dropSpeed / fps);
     
@@ -196,19 +220,34 @@ void draw(){
   
   //render 'base' at bottom of screen ------------------------------------------------------------
   fill(#42464c);
-  rect(0, baseY, width, baseHeight);
+  pushMatrix();
+  translate(width/2, height * 0.83);
+
+  //noFill();
+  stroke(255);
+
+  box(1200,100, 400);
+  popMatrix();
   
   
+  
+  //render cups
   pushMatrix();
   fill(#ffffff);
-  scale(2);
-  translate(width/2, height * 0.8);
-  rotateX(PI)
-
+  scale(0.8);
+  translate(width * 0.46, height * 0.92, 140);
+  
+  //animate movement in x direction
+  //cup_x_pos += cup_speed;
+  //if (cup_x_pos > (width * 2))
+  //  cup_x_pos = 0;
+  //translate(cup_x_pos,0,0);
+  
+  rotateX(PI);
+  rotateY(PI * 1.5);
+  rotateZ(PI * -0.02);
+  cup.setFill(0xfffcfdff);
   shape(cup, 0, 0);
-  
-  
-  
   popMatrix();
 
 }
