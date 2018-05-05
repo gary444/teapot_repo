@@ -1,22 +1,33 @@
 public class Cup {
   
- public int x_pos;
- public int y_pos;
- public boolean is_hit;
+ private int x_pos;
+ private int y_pos;
+ private boolean is_hit;
  
- // dimensions of target area
- 
- public Cup (int _x_pox, int _y_pos){
+ public Cup (float _x_pos, float _y_pos){
   
    is_hit = false;
-   
+   x_pos = (int)_x_pos;
+   y_pos = (int)_y_pos;
  }
  
- public boolean check_for_hit(int drop_x, int drop_y){
-   
-   boolean hit = false;
-   return hit;
-   
+ public boolean getHit(){
+   return is_hit;
+ }
+ public void setHit(boolean hit){
+   is_hit = hit;
  }
  
+ public int getX(){
+   return x_pos;
+ }
+ public int getY(){
+    return y_pos;
+ }
+ 
+ public void updateXPos(int speed){
+   x_pos += speed;
+}
+
+
 }
