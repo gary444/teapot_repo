@@ -42,8 +42,10 @@ ArrayList<Cup> cups = new ArrayList<Cup>();
 
 //water droplets
 ArrayList<Droplet> droplets = new ArrayList<Droplet>();
-final int dropSpeed = 400; //px per second
+final int dropSpeed = 600; //px per second
 int dropStartX, dropStartY;
+int since_last_drop;
+int drop_interval;
 
 int targetX,targetY,targetW,targetH;
 
@@ -61,7 +63,7 @@ int WHITE = 0xffffffff;
 int score;
 int targetScore;
 boolean cups_on;
-final int GAME_TIME = 10;
+final int GAME_TIME = 30;
 int gameStart = 0;
 int gameState; //0 - READY // 1 - PLAYING // 2 - ENDED
 
@@ -101,8 +103,9 @@ void setup() {
   teapot.setTexture(teapot_tx); 
   
   //droplet start points
-  dropStartX = int((width * 0.38));
-  dropStartY = int(height * 0.4);
+  dropStartX = int((width * 0.35));
+  dropStartY = int(height * 0.43);
+  drop_interval = 20;//frames
   
   targetX = int(width * 0.46);
   targetW = int(width * 0.03);
@@ -129,11 +132,14 @@ void keyPressed(){
     gameState = 1;
     score = 0;
   }
+  else if (gameState == 2){
+    gameState = 0;
+  }
   else {
     //w key triggers water droplet
    if (key == 'w'){
      
-     droplets.add(new Droplet(dropStartX,dropStartY));
+     addDroplet();
    }
    //c key adds a cup
    else if (key == 'c'){
@@ -148,6 +154,9 @@ void keyPressed(){
 
 void addCup(){
   cups.add(new Cup(0, height * 0.92));
+}
+void addDroplet(){
+  droplets.add(new Droplet(dropStartX,dropStartY));
 }
 
 void draw(){
@@ -223,8 +232,15 @@ void draw(){
     } else {
       pitch += pitchChange;
     }
-  }  
-    
+  }
+  
+  //trigger water 
+  since_last_drop++;
+  if (pitch <= -29 && since_last_drop > drop_interval){
+    addDroplet();
+    since_last_drop = 0;
+  }
+  
     
   //render scene box---------------------------------------------------------
   fill(#ccdfff);
